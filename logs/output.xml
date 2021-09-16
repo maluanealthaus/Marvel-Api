@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 4.1 (Python 3.9.7 on win32)" generated="20210907 14:47:03.676" rpa="false" schemaversion="2">
+<suite id="s1" name="CreateCharacters" source="C:\Projects\Marvel-Api\tests\CreateCharacters.robot">
+<kw name="Set Client Key" library="base" type="SETUP">
+<arg>maluanealthaus@yahoo.com</arg>
+<kw name="Create Dictionary" library="BuiltIn">
+<var>&amp;{usuario}</var>
+<arg>email=${email}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<msg timestamp="20210907 14:47:04.059" level="INFO">&amp;{usuario} = { email=maluanealthaus@yahoo.com }</msg>
+<status status="PASS" starttime="20210907 14:47:04.059" endtime="20210907 14:47:04.059"/>
+</kw>
+<kw name="POST" library="RequestsLibrary">
+<var>${response}</var>
+<arg>http://marvel.qaninja.academy/accounts</arg>
+<arg>json=${usuario}</arg>
+<doc>Sends a POST request.</doc>
+<msg timestamp="20210907 14:47:04.520" level="INFO">POST Request : url=http://marvel.qaninja.academy/accounts 
+ path_url=/accounts 
+ headers={'User-Agent': 'python-requests/2.26.0', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'Content-Length': '37', 'Content-Type': 'application/json'} 
+ body=b'{"email": "maluanealthaus@yahoo.com"}' 
+ </msg>
+<msg timestamp="20210907 14:47:04.521" level="INFO">POST Response : url=http://marvel.qaninja.academy/accounts 
+ status=200, reason=OK 
+ headers={'Server': 'Cowboy', 'Connection': 'keep-alive', 'X-Powered-By': 'Express', 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json; charset=utf-8', 'Content-Length': '41', 'Etag': 'W/"29-unABoWKel4+9b7z+0LFJD7+lmNE"', 'Date': 'Tue, 07 Sep 2021 17:47:03 GMT', 'Via': '1.1 vegur'} 
+ body={"client_key":"61369de0ee284200167b353f"} 
+ </msg>
+<msg timestamp="20210907 14:47:04.521" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<status status="PASS" starttime="20210907 14:47:04.059" endtime="20210907 14:47:04.521"/>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<var>${client_key}</var>
+<arg>${response.json()}[client_key]</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<msg timestamp="20210907 14:47:04.522" level="INFO">${client_key} = 61369de0ee284200167b353f</msg>
+<status status="PASS" starttime="20210907 14:47:04.521" endtime="20210907 14:47:04.522"/>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<var>&amp;{HEADERS}</var>
+<arg>client_key=${client_key}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<msg timestamp="20210907 14:47:04.525" level="INFO">&amp;{HEADERS} = { client_key=61369de0ee284200167b353f }</msg>
+<status status="PASS" starttime="20210907 14:47:04.525" endtime="20210907 14:47:04.525"/>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<arg>${HEADERS}</arg>
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<msg timestamp="20210907 14:47:04.527" level="INFO">${HEADERS} = {'client_key': '61369de0ee284200167b353f'}</msg>
+<status status="PASS" starttime="20210907 14:47:04.525" endtime="20210907 14:47:04.527"/>
+</kw>
+<status status="PASS" starttime="20210907 14:47:04.058" endtime="20210907 14:47:04.527"/>
+</kw>
+<test id="s1-t1" name="Deve cadastrar um personagem">
+<kw name="Factory Thanos" library="thanos">
+<var>${personagem}</var>
+<msg timestamp="20210907 14:47:04.532" level="INFO">${personagem} = {'name': 'Katherine Ellis', 'aliases': 'Thanos', 'age': 3000, 'team': 'Ordem Negra', 'active': False}</msg>
+<status status="PASS" starttime="20210907 14:47:04.530" endtime="20210907 14:47:04.532"/>
+</kw>
+<kw name="ResourceCharacters.POST New Character">
+<var>${response}</var>
+<arg>${personagem}</arg>
+<msg timestamp="20210907 14:47:04.540" level="FAIL">No keyword with name 'ResourceCharacters.POST New Character' found.</msg>
+<status status="FAIL" starttime="20210907 14:47:04.540" endtime="20210907 14:47:04.540"/>
+</kw>
+<kw name="Status Should Be" library="RequestsLibrary">
+<arg>200</arg>
+<arg>${response}</arg>
+<doc>Fails if response status code is different than the expected.</doc>
+<status status="NOT RUN" starttime="20210907 14:47:04.543" endtime="20210907 14:47:04.544"/>
+</kw>
+<status status="FAIL" starttime="20210907 14:47:04.527" endtime="20210907 14:47:04.546">No keyword with name 'ResourceCharacters.POST New Character' found.</status>
+</test>
+<test id="s1-t2" name="Não deve cadastrar personagem com nome duplicado">
+<kw name="Factory Thanos" library="thanos">
+<var>${personagem}</var>
+<msg timestamp="20210907 14:47:04.555" level="INFO">${personagem} = {'name': 'Rebecca Henry', 'aliases': 'Thanos', 'age': 3000, 'team': 'Ordem Negra', 'active': False}</msg>
+<status status="PASS" starttime="20210907 14:47:04.553" endtime="20210907 14:47:04.555"/>
+</kw>
+<kw name="ResourceCharacters.POST New Character">
+<arg>${personagem}</arg>
+<msg timestamp="20210907 14:47:04.563" level="FAIL">No keyword with name 'ResourceCharacters.POST New Character' found.</msg>
+<status status="FAIL" starttime="20210907 14:47:04.562" endtime="20210907 14:47:04.563"/>
+</kw>
+<kw name="ResourceCharacters.POST New Character">
+<var>${response}</var>
+<arg>${personagem}</arg>
+<status status="NOT RUN" starttime="20210907 14:47:04.572" endtime="20210907 14:47:04.572"/>
+</kw>
+<kw name="Status Should Be" library="RequestsLibrary">
+<arg>409</arg>
+<arg>${response}</arg>
+<doc>Fails if response status code is different than the expected.</doc>
+<status status="NOT RUN" starttime="20210907 14:47:04.573" endtime="20210907 14:47:04.573"/>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<arg>${response.json()}[error]</arg>
+<arg>Character already exists :(</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="NOT RUN" starttime="20210907 14:47:04.575" endtime="20210907 14:47:04.575"/>
+</kw>
+<tag>dup</tag>
+<status status="FAIL" starttime="20210907 14:47:04.551" endtime="20210907 14:47:04.577">No keyword with name 'ResourceCharacters.POST New Character' found.</status>
+</test>
+<doc>Suite de testes do cadastro de personagens da Marvel</doc>
+<status status="FAIL" starttime="20210907 14:47:03.680" endtime="20210907 14:47:04.583"/>
+</suite>
+<statistics>
+<total>
+<stat pass="0" fail="2" skip="0">All Tests</stat>
+</total>
+<tag>
+<stat pass="0" fail="1" skip="0">dup</stat>
+</tag>
+<suite>
+<stat pass="0" fail="2" skip="0" id="s1" name="CreateCharacters">CreateCharacters</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
